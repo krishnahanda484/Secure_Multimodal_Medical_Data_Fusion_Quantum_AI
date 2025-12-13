@@ -1,7 +1,7 @@
 # ============================================
 # Core Deep Learning
 # ============================================
-torch==2.5.0
+torch==2.1.0
 torchvision==0.16.0
 torchaudio==2.1.0
 
@@ -75,3 +75,4 @@ python-dotenv==1.0.0
 # pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 # (Replace cu118 with your CUDA version: cu116, cu117, cu118, etc.)
+
