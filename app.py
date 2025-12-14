@@ -317,18 +317,55 @@ def load_models():
             biobert_tokenizer = AutoTokenizer.from_pretrained(BIOBERT_MODEL)
             biobert_model = AutoModel.from_pretrained(BIOBERT_MODEL).to(DEVICE)
             biobert_model.eval()
-            # Load fusion and classifier
+            # ============================================
+            # LOAD FUSION & CLASSIFIER MODELS (SAFE)
+            # ============================================
+            
+            from pathlib import Path
+            
+            # Resolve model directory safely
+            MODELS_DIR = Path(MODELS_DIR)
+            
             fusion_model = AttentionFusion().to(DEVICE)
             classifier = MultimodalClassifier().to(DEVICE)
-            # Load trained weights
-            fusion_model.load_state_dict(
-                torch.load(f"{MODELS_DIR}/best_fusion.pth", map_location=DEVICE)
-            )
-            classifier.load_state_dict(
-                torch.load(f"{MODELS_DIR}/best_classifier.pth", map_location=DEVICE)
-            )
-            fusion_model.eval()
-            classifier.eval()
+            
+            # Preferred model filenames (fallback supported)
+            FUSION_CANDIDATES = [
+                MODELS_DIR / "best_fusion.pth",
+                MODELS_DIR / "final_fusion.pth"
+            ]
+            
+            CLASSIFIER_CANDIDATES = [
+                MODELS_DIR / "best_classifier.pth",
+                MODELS_DIR / "final_classifier.pth"
+            ]
+            
+            def load_weights(model, candidates, model_name):
+                for path in candidates:
+                    if path.exists():
+                        model.load_state_dict(
+                            torch.load(path, map_location=DEVICE)
+                        )
+                        return path.name
+                raise FileNotFoundError(
+                    f"{model_name} weights not found. Checked: {[str(p) for p in candidates]}"
+                )
+            
+            # Load weights safely
+            try:
+                fusion_loaded = load_weights(fusion_model, FUSION_CANDIDATES, "Fusion model")
+                classifier_loaded = load_weights(classifier, CLASSIFIER_CANDIDATES, "Classifier model")
+            
+                fusion_model.eval()
+                classifier.eval()
+            
+                st.success(f"Models loaded successfully: {fusion_loaded}, {classifier_loaded}")
+            
+            except Exception as e:
+                st.error(" Model loading failed")
+                st.error(str(e))
+                st.stop()
+           
             # Load quantum signature generator
             qsig = QuantumSignature()
             return {
@@ -790,4 +827,5 @@ if __name__ == "__main__":
     if not st.session_state.logged_in:
         login_page()
     else:
+
         main_app()
