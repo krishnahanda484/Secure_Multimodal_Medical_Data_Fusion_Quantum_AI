@@ -321,45 +321,38 @@ def load_models():
             # LOAD FUSION & CLASSIFIER MODELS (SAFE)
             # ============================================
             
-            from pathlib import Path
-            
-            # Resolve model directory safely
-            MODELS_DIR = Path(MODELS_DIR)
-            
+            # Initialize models
             fusion_model = AttentionFusion().to(DEVICE)
             classifier = MultimodalClassifier().to(DEVICE)
             
-            # Preferred model filenames (fallback supported)
-            FUSION_CANDIDATES = [
-                MODELS_DIR / "best_fusion.pth",
-                MODELS_DIR / "final_fusion.pth"
-            ]
+            # Resolve model paths safely
+            fusion_path = os.path.join(MODELS_DIR, "best_fusion.pth")
+            classifier_path = os.path.join(MODELS_DIR, "best_classifier.pth")
             
-            CLASSIFIER_CANDIDATES = [
-                MODELS_DIR / "best_classifier.pth",
-                MODELS_DIR / "final_classifier.pth"
-            ]
-            
-            def load_weights(model, candidates, model_name):
-                for path in candidates:
-                    if path.exists():
-                        model.load_state_dict(
-                            torch.load(path, map_location=DEVICE)
-                        )
-                        return path.name
+            # ---- Load Fusion Model ----
+            if not os.path.exists(fusion_path):
                 raise FileNotFoundError(
-                    f"{model_name} weights not found. Checked: {[str(p) for p in candidates]}"
+                    f"Fusion model not found at: {fusion_path}\n"
+                    f"Available files: {os.listdir(MODELS_DIR)}"
                 )
             
-            # Load weights safely
-            try:
-                fusion_loaded = load_weights(fusion_model, FUSION_CANDIDATES, "Fusion model")
-                classifier_loaded = load_weights(classifier, CLASSIFIER_CANDIDATES, "Classifier model")
+            fusion_state = torch.load(fusion_path, map_location=DEVICE)
+            fusion_model.load_state_dict(fusion_state)
             
-                fusion_model.eval()
-                classifier.eval()
+            # ---- Load Classifier Model ----
+            if not os.path.exists(classifier_path):
+                raise FileNotFoundError(
+                    f"Classifier model not found at: {classifier_path}\n"
+                    f"Available files: {os.listdir(MODELS_DIR)}"
+                )
             
-                st.success(f"Models loaded successfully: {fusion_loaded}, {classifier_loaded}")
+            classifier_state = torch.load(classifier_path, map_location=DEVICE)
+            classifier.load_state_dict(classifier_state)
+            
+            # Set to evaluation mode
+            fusion_model.eval()
+            classifier.eval()
+            st.success(f"Models loaded successfully: {fusion_loaded}, {classifier_loaded}")
             
             except Exception as e:
                 st.error(" Model loading failed")
@@ -829,3 +822,4 @@ if __name__ == "__main__":
     else:
 
         main_app()
+
