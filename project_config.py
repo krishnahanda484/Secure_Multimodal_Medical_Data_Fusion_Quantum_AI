@@ -19,10 +19,12 @@ SOURCE_DATA_ROOT = PROJECT_ROOT / "data"
 MODELS_DIR = PROJECT_ROOT / "models"
 LOGS_DIR = PROJECT_ROOT / "logs"
 REPORTS_DIR = PROJECT_ROOT / "reports"
+PROCESSED_DIR = PROJECT_ROOT / "processed_data"
 
 # Security
-SECURITY_KEY_PATH = os.path.join(PROJECT_ROOT, "security.key")
-ENCRYPTED_MODEL_PATH = os.path.join(MODELS_DIR, "secure_model.enc")
+SECURITY_KEY_PATH = PROJECT_ROOT / "security.key"
+ENCRYPTED_MODEL_PATH = MODELS_DIR / "secure_model.enc"
+
 
 # ============================================
 # CREATE DIRECTORIES
@@ -142,3 +144,4 @@ print("Configuration loaded successfully!")
 print(f"Project Root: {PROJECT_ROOT}")
 
 print(f"Models will be saved to: {MODELS_DIR}")
+
