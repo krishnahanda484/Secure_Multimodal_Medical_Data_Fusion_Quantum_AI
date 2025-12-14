@@ -10,17 +10,15 @@ from pathlib import Path
 # ============================================
 # PROJECT PATHS
 # ============================================
-# Root directory where raw datasets are stored
-SOURCE_DATA_ROOT = r"D:\medical_datasets"
+# Cloud-safe project root
+PROJECT_ROOT = Path(__file__).parent.resolve()
 
-# Main project directory for processed data and models
-PROJECT_ROOT = r"D:\Medical_Project"
+# Optional: datasets not used in Streamlit demo
+SOURCE_DATA_ROOT = PROJECT_ROOT / "data"
 
-# Subdirectories
-PROCESSED_DIR = os.path.join(PROJECT_ROOT, "processed_data")
-MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
-LOGS_DIR = os.path.join(PROJECT_ROOT, "logs")
-REPORTS_DIR = os.path.join(PROJECT_ROOT, "reports")
+MODELS_DIR = PROJECT_ROOT / "models"
+LOGS_DIR = PROJECT_ROOT / "logs"
+REPORTS_DIR = PROJECT_ROOT / "reports"
 
 # Security
 SECURITY_KEY_PATH = os.path.join(PROJECT_ROOT, "security.key")
@@ -142,4 +140,5 @@ LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
 print("Configuration loaded successfully!")
 print(f"Project Root: {PROJECT_ROOT}")
+
 print(f"Models will be saved to: {MODELS_DIR}")
