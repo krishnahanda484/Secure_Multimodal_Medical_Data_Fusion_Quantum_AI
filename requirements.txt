@@ -1,21 +1,25 @@
 # ==============================
+# Web App
+# ==============================
+streamlit>=1.32.0
+
+# ==============================
 # Core Deep Learning (Python 3.13 compatible)
 # ==============================
 torch>=2.5.0
 torchvision>=0.21.0
-torchaudio>=2.5.0
 
 # ==============================
 # Transformers & NLP
 # ==============================
-transformers>=4.38.0
+transformers>=4.40.0
 tokenizers>=0.15.0
 sentencepiece>=0.1.99
 
 # ==============================
 # Computer Vision
 # ==============================
-opencv-python-headless>=4.9.0
+opencv-python-headless>=4.9.0.80
 Pillow>=10.2.0
 
 # ==============================
@@ -29,17 +33,17 @@ scikit-learn>=1.4.0
 # ==============================
 # Quantum Computing
 # ==============================
-pennylane>=0.36.0
+pennylane>=0.35.0
 autoray>=0.6.9
 
 # ==============================
 # Medical Imaging
 # ==============================
-nibabel>=5.2.0
+nibabel>=5.2.1
 pydicom>=2.4.4
 
 # ==============================
-# Security & Cryptography
+# Security
 # ==============================
 cryptography>=42.0.0
 
@@ -50,20 +54,14 @@ PyPDF2>=3.0.1
 reportlab>=4.1.0
 
 # ==============================
-# Web Application
-# ==============================
-streamlit>=1.31.0
-
-# ==============================
 # Visualization
 # ==============================
-matplotlib>=3.8.3
-seaborn>=0.13.2
-plotly>=5.19.0
+matplotlib>=3.9.0
+plotly>=5.20.0
 
 # ==============================
 # Utilities
 # ==============================
 tqdm>=4.66.2
-requests>=2.31.0
+requests>=2.32.0
 python-dotenv>=1.0.1
